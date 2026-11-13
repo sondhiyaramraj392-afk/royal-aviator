@@ -1,0 +1,116 @@
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+body { background: #0a0b0d; color: #fff; display: flex; justify-content: center; min-height: 100vh; }
+
+/* Auth Screens */
+.auth-wrapper { width: 100%; max-width: 420px; padding: 20px; display: flex; align-items: center; }
+.auth-card { width: 100%; background: #141518; border: 1px solid #26282e; border-radius: 20px; padding: 25px; }
+.royal-logo-box { background: #1b1c20; padding: 14px; border-radius: 14px; text-align: center; margin-bottom: 18px; }
+.royal-logo { font-size: 26px; font-weight: 900; color: #e50914; letter-spacing: 2px; font-style: italic; }
+.auth-card h2 { text-align: center; font-size: 24px; }
+.auth-card p { text-align: center; color: #8c9099; font-size: 14px; margin-bottom: 18px; }
+.auth-tabs { display: flex; background: #1b1c20; border-radius: 12px; padding: 4px; margin-bottom: 18px; }
+.tab-btn { flex: 1; padding: 10px; border: none; background: transparent; color: #999; font-weight: bold; border-radius: 10px; cursor: pointer; }
+.tab-btn.active { background: linear-gradient(90deg, #d4f82c, #a3e635); color: #000; }
+.auth-card label { display: block; font-size: 13px; color: #ccc; margin-bottom: 6px; }
+.auth-card input { width: 100%; padding: 12px; background: #1b1c20; border: 1px solid #2c2f36; border-radius: 10px; color: #fff; margin-bottom: 14px; }
+.btn-lime { width: 100%; padding: 14px; border: none; border-radius: 12px; background: linear-gradient(90deg, #d4f82c, #a3e635); color: #000; font-weight: 800; font-size: 15px; cursor: pointer; }
+.switch-text { margin-top: 15px; font-size: 13px; }
+.switch-text span { color: #d4f82c; cursor: pointer; font-weight: bold; }
+
+/* App Shell */
+.app-shell { width: 100%; max-width: 460px; background: #0d0e11; min-height: 100vh; padding-bottom: 75px; position: relative; border-left: 1px solid #1e2025; border-right: 1px solid #1e2025; }
+.top-bar { display: flex; justify-content: space-between; align-items: center; padding: 14px 16px; background: #121317; border-bottom: 1px solid #22242a; position: sticky; top: 0; z-index: 5; }
+.top-balance { text-align: right; cursor: pointer; }
+.bal-label { display: block; font-size: 11px; color: #8c9099; }
+.bal-val { font-size: 16px; font-weight: 800; color: #d4f82c; }
+
+.tab-view { display: none; padding: 16px; }
+.tab-view.active { display: block; }
+
+/* Lobby */
+.promo-banner { background: linear-gradient(135deg, #272212, #17181c); border: 1px solid #3c361c; border-radius: 16px; padding: 18px; margin-bottom: 14px; }
+.badge-live { background: #2c2814; color: #d4f82c; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: bold; }
+.promo-banner h3 { margin-top: 10px; font-size: 20px; }
+.promo-banner p { font-size: 12px; color: #aaa; }
+
+.quick-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 18px; }
+.quick-card { background: #15171c; border: 1px solid #24272f; border-radius: 14px; padding: 14px; display: flex; align-items: center; gap: 10px; cursor: pointer; }
+.q-icon { width: 36px; height: 36px; border-radius: 10px; background: #262918; color: #d4f82c; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 18px; }
+.quick-card small { color: #8c9099; font-size: 11px; }
+
+.section-head span { font-size: 12px; color: #8c9099; }
+.section-head h3 { margin-bottom: 10px; }
+
+.aviator-hero-card { background: radial-gradient(circle at top, #2c1015, #141519); border: 1px solid #3a1c22; border-radius: 18px; padding: 18px; margin-bottom: 12px; cursor: pointer; }
+.hero-plane-art { font-size: 48px; text-align: center; padding: 15px 0; }
+.hero-bottom { display: flex; justify-content: space-between; align-items: center; }
+.btn-play-pill { background: #2c2a18; color: #d4f82c; border: 1px solid #524d24; padding: 8px 14px; border-radius: 20px; font-weight: bold; cursor: pointer; }
+
+.mini-games-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.mini-card { background: #15171c; border: 1px solid #24272f; border-radius: 14px; padding: 14px; cursor: pointer; }
+.mini-card small { color: #8c9099; font-size: 11px; }
+
+/* Aviator Live Screen */
+.aviator-top-strip { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; gap: 8px; }
+.av-brand { color: #e50914; font-weight: 900; font-style: italic; font-size: 18px; }
+.history-pills { display: flex; gap: 5px; overflow: hidden; }
+.pill { font-size: 11px; padding: 2px 7px; border-radius: 10px; background: #1b1d24; font-weight: bold; }
+.pill.blue { color: #38bdf8; }
+.pill.purple { color: #c084fc; }
+.pill.pink { color: #f472b6; }
+
+.canvas-box { position: relative; width: 100%; height: 210px; background: radial-gradient(circle at bottom left, #2d111b, #0e1015 75%); border-radius: 14px; border: 1px solid #252830; margin-bottom: 10px; overflow: hidden; }
+#gameCanvas { width: 100%; height: 100%; display: block; }
+.center-readout { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; pointer-events: none; }
+.flew-away { font-size: 16px; font-weight: bold; color: #fff; margin-bottom: 2px; }
+.mult-num { font-size: 44px; font-weight: 900; }
+.wait-sub { font-size: 11px; color: #d4f82c; font-weight: bold; margin-top: 4px; }
+
+.dual-bet-container { display: flex; flex-direction: column; gap: 10px; }
+.bet-panel { background: #16181d; border: 1px solid #252830; border-radius: 14px; padding: 10px; display: flex; gap: 10px; align-items: center; }
+.bet-left { flex: 1; }
+.stepper { display: flex; align-items: center; background: #0e1014; border-radius: 20px; padding: 3px 8px; margin-bottom: 6px; border: 1px solid #2a2d36; }
+.stepper button { background: none; border: none; color: #fff; font-size: 18px; width: 26px; cursor: pointer; }
+.stepper input { width: 100%; background: none; border: none; color: #fff; text-align: center; font-weight: bold; font-size: 14px; }
+.preset-row { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+.preset-row button { background: #20232b; border: none; color: #ccc; font-size: 11px; padding: 4px; border-radius: 8px; cursor: pointer; }
+
+.big-bet-btn { width: 135px; height: 74px; border: none; border-radius: 14px; font-size: 16px; font-weight: 800; color: #fff; cursor: pointer; line-height: 1.2; }
+.big-bet-btn span { font-size: 13px; font-weight: 600; }
+.big-bet-btn.green { background: #28a745; box-shadow: 0 4px 12px rgba(40,167,69,0.3); }
+.big-bet-btn.orange { background: #f59e0b; color: #000; }
+.big-bet-btn.red { background: #dc2626; }
+.big-bet-btn.disabled { background: #323640; color: #999; cursor: not-allowed; }
+
+/* Wallet */
+.wallet-hero-card { background: linear-gradient(145deg, #1d1e18, #141519); border: 1px solid #303224; border-radius: 18px; padding: 18px; margin-bottom: 14px; }
+.w-tag { background: #27291c; color: #d4f82c; padding: 4px 10px; border-radius: 12px; font-size: 12px; }
+.wallet-hero-card h2 { margin-top: 10px; }
+.wallet-hero-card p { font-size: 12px; color: #999; margin-bottom: 14px; }
+.w-amount { font-size: 32px; font-weight: 900; color: #d4f82c; }
+
+.activity-item { background: #15171c; border: 1px solid #24272f; border-radius: 12px; padding: 12px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.activity-item small { color: #8c9099; font-size: 11px; }
+.amt-plus { color: #2ecc71; font-weight: bold; }
+.amt-minus { color: #f87171; font-weight: bold; }
+.status-pill { font-size: 11px; padding: 2px 8px; border-radius: 10px; }
+.status-pill.pending { background: #3b3214; color: #facc15; }
+.status-pill.approved { background: #143622; color: #4ade80; }
+.status-pill.rejected { background: #3b1418; color: #f87171; }
+
+.btn-logout-full { display: block; text-align: center; margin-top: 20px; padding: 12px; background: #e50914; color: #fff; text-decoration: none; border-radius: 10px; font-weight: bold; }
+
+/* Bottom Nav */
+.bottom-nav { position: fixed; bottom: 0; width: 100%; max-width: 460px; background: #131418; border-top: 1px solid #24272f; display: flex; justify-content: space-around; padding: 8px 0; z-index: 10; }
+.nav-item { text-align: center; font-size: 11px; color: #8c9099; cursor: pointer; }
+.nav-item.active { color: #d4f82c; font-weight: bold; }
+
+/* Modals */
+.modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 20; align-items: center; justify-content: center; padding: 15px; }
+.modal-box { background: #16181d; border: 1px solid #2e323b; border-radius: 18px; padding: 20px; width: 100%; max-width: 360px; position: relative; text-align: center; }
+.close-btn { position: absolute; right: 15px; top: 10px; font-size: 24px; cursor: pointer; color: #aaa; }
+.timing-notice { background: #292312; border: 1px solid #594b1d; color: #fde047; font-size: 12px; padding: 10px; border-radius: 10px; margin: 12px 0; text-align: left; line-height: 1.4; }
+.qr-box { background: #fff; color: #000; padding: 12px; border-radius: 12px; margin-bottom: 12px; }
+.qr-box p { font-size: 13px; margin-top: 6px; }
+.btn-upi-app { display: inline-block; margin-top: 8px; background: #5f259f; color: #fff; padding: 7px 14px; border-radius: 8px; text-decoration: none; font-size: 12px; font-weight: bold; }
+.modal-box input { width: 100%; padding: 11px; background: #0e1014; border: 1px solid #2c2f36; border-radius: 10px; color: #fff; margin-bottom: 10px; }
