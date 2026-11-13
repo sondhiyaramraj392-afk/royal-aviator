@@ -1,16 +1,14 @@
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 import sqlite3
 import os
+import tempfile
 from datetime import datetime
 
 app = Flask(__name__)
 app.secret_key = 'royal_aviator_ramraj_boss_secret'
 
-# Vercel par read-only filesystem ki problem solve karne ke liye /tmp folder ka use
-if os.environ.get('VERCEL'):
-    DB_PATH = os.path.join('/tmp', 'royal_database.db')
-else:
-    DB_PATH = 'royal_database.db'
+# Vercel aur local dono ke liye 100% writable temporary folder ka path
+DB_PATH = os.path.join(tempfile.gettempdir(), 'royal_database.db')
 
 def get_db_connection():
     conn = sqlite3.connect(DB_PATH)
@@ -46,7 +44,6 @@ def init_db():
     conn.commit()
     conn.close()
 
-# App shuru hote hi database ensure karein
 init_db()
 
 @app.route('/')
@@ -105,7 +102,7 @@ def deposit_request():
                  (session['mobile'], amount, utr, 'Pending', now))
     conn.commit()
     conn.close()
-    return "<script>alert('Deposit request bhej di gayi hai! Admin approval ke baad wallet mein jud jayega.'); window.location='/';</script>"
+    return "<script>alert('Deposit request bhej di gayi hai!'); window.location='/';</script>"
 
 @app.route('/withdraw_request', methods=['POST'])
 def withdraw_request():
