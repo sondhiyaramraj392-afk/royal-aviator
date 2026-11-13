@@ -6,7 +6,7 @@ from datetime import datetime
 app = Flask(__name__)
 app.secret_key = 'royal_aviator_ramraj_boss_secret'
 
-# Vercel par read-only filesystem ki problem solve karne ke liye /tmp folder ka use karenge
+# Vercel par read-only filesystem ki problem solve karne ke liye /tmp folder ka use
 if os.environ.get('VERCEL'):
     DB_PATH = os.path.join('/tmp', 'royal_database.db')
 else:
@@ -46,6 +46,7 @@ def init_db():
     conn.commit()
     conn.close()
 
+# App shuru hote hi database ensure karein
 init_db()
 
 @app.route('/')
@@ -65,7 +66,6 @@ def register():
     password = request.form['password'].strip()
     conn = get_db_connection()
     try:
-        # Register karte hi Rs 100 welcome bonus
         conn.execute('INSERT INTO users (mobile, password, balance) VALUES (?, ?, ?)', (mobile, password, 100.0))
         conn.commit()
         session['mobile'] = mobile
@@ -117,19 +117,17 @@ def withdraw_request():
     
     conn = get_db_connection()
     user = conn.execute('SELECT * FROM users WHERE mobile = ?', (session['mobile'],)).fetchone()
-    if amount < 100 or amount > user['balance']:
+    if not user or amount < 100 or amount > user['balance']:
         conn.close()
         return "<script>alert('Minimum withdrawal ₹100 hai ya aapka balance kam hai!'); window.location='/';</script>"
     
-    # Balance hold (deduct) karein taaki double withdraw na ho
     conn.execute('UPDATE users SET balance = balance - ? WHERE mobile = ?', (amount, session['mobile']))
     conn.execute('INSERT INTO withdrawals (mobile, amount, upi_id, status, created_at) VALUES (?, ?, ?, ?, ?)',
                  (session['mobile'], amount, upi_id, 'Pending', now))
     conn.commit()
     conn.close()
-    return "<script>alert('Withdrawal request bhej di gayi hai! Admin check karke aapke UPI par bhej dega.'); window.location='/';</script>"
+    return "<script>alert('Withdrawal request bhej di gayi hai!'); window.location='/';</script>"
 
-# Admin Control Panel
 @app.route('/admin', methods=['GET', 'POST'])
 def admin():
     conn = get_db_connection()
@@ -153,7 +151,6 @@ def admin():
                 if action == 'approve':
                     conn.execute("UPDATE withdrawals SET status = 'Approved' WHERE id = ?", (req_id,))
                 else:
-                    # Reject karne par paisa wapas user ke wallet mein daal dein
                     conn.execute('UPDATE users SET balance = balance + ? WHERE mobile = ?', (wit['amount'], wit['mobile']))
                     conn.execute("UPDATE withdrawals SET status = 'Rejected' WHERE id = ?", (req_id,))
         conn.commit()
@@ -164,39 +161,47 @@ def admin():
     conn.close()
     return render_template('admin.html', deposits=deposits, withdrawals=withdrawals, users=users)
 
-# Game APIs (Dual Bet Support)
 @app.route('/place_bet', methods=['POST'])
 def place_bet():
     if 'mobile' not in session:
         return jsonify({'success': False, 'msg': 'Login karein'})
-    data = request.get_json()
-    amount = float(data['amount'])
-    
-    conn = get_db_connection()
-    user = conn.execute('SELECT * FROM users WHERE mobile = ?', (session['mobile'],)).fetchone()
-    if amount <= 0 or user['balance'] < amount:
+    try:
+        data = request.get_json()
+        if not data or 'amount' not in data:
+            return jsonify({'success': False, 'msg': 'Invalid data'})
+        
+        amount = float(data['amount'])
+        conn = get_db_connection()
+        user = conn.execute('SELECT * FROM users WHERE mobile = ?', (session['mobile'],)).fetchone()
+        
+        if not user or amount <= 0 or user['balance'] < amount:
+            conn.close()
+            return jsonify({'success': False, 'msg': 'Insufficient Balance!'})
+        
+        new_bal = user['balance'] - amount
+        conn.execute('UPDATE users SET balance = ? WHERE mobile = ?', (new_bal, session['mobile']))
+        conn.commit()
         conn.close()
-        return jsonify({'success': False, 'msg': 'Insufficient Balance!'})
-    
-    new_bal = user['balance'] - amount
-    conn.execute('UPDATE users SET balance = ? WHERE mobile = ?', (new_bal, session['mobile']))
-    conn.commit()
-    conn.close()
-    return jsonify({'success': True, 'new_balance': new_bal})
+        return jsonify({'success': True, 'new_balance': new_bal})
+    except Exception as e:
+        return jsonify({'success': False, 'msg': str(e)})
 
 @app.route('/cashout', methods=['POST'])
 def cashout():
     if 'mobile' not in session:
         return jsonify({'success': False})
-    data = request.get_json()
-    win_amount = float(data['win_amount'])
-    
-    conn = get_db_connection()
-    conn.execute('UPDATE users SET balance = balance + ? WHERE mobile = ?', (win_amount, session['mobile']))
-    conn.commit()
-    user = conn.execute('SELECT * FROM users WHERE mobile = ?', (session['mobile'],)).fetchone()
-    conn.close()
-    return jsonify({'success': True, 'new_balance': user['balance']})
+    try:
+        data = request.get_json()
+        win_amount = float(data['win_amount'])
+        
+        conn = get_db_connection()
+        conn.execute('UPDATE users SET balance = balance + ? WHERE mobile = ?', (win_amount, session['mobile']))
+        conn.commit()
+        user = conn.execute('SELECT * FROM users WHERE mobile = ?', (session['mobile'],)).fetchone()
+        conn.close()
+        return jsonify({'success': True, 'new_balance': user['balance']})
+    except Exception as e:
+        return jsonify({'success': False, 'msg': str(e)})
 
 if __name__ == '__main__':
     app.run(debug=True, port=500)
