@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Control Room - ROYAL AVIATOR</title>
+    <style>
+        body { background: #0c0d0f; color: #fff; font-family: sans-serif; padding: 20px; }
+        h1 { color: #d4f82c; }
+        h2 { margin-top: 30px; border-bottom: 1px solid #2b2d33; padding-bottom: 8px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 12px; background: #16181d; }
+        th, td { border: 1px solid #2b2d33; padding: 10px; text-align: center; font-size: 14px; }
+        th { background: #1f2229; color: #d4f82c; }
+        .btn { padding: 6px 12px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; }
+        .app { background: #28a745; color: white; }
+        .rej { background: #e50914; color: white; }
+        .Pending { color: #f1c40f; font-weight: bold; }
+        .Approved { color: #2ecc71; font-weight: bold; }
+        .Rejected { color: #e74c3c; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h1>👑 ROYAL AVIATOR - Admin Panel (Ramraj Boss)</h1>
+    <a href="/" style="color:#d4f82c;">← Website Home par wapas jayein</a>
+
+    <h2>1. Deposit Requests (UTR Check karke Approve karein)</h2>
+    <table>
+        <tr>
+            <th>ID</th><th>Mobile</th><th>Amount</th><th>UTR / Txn ID</th><th>Time</th><th>Status</th><th>Action</th>
+        </tr>
+        {% for d in deposits %}
+        <tr>
+            <td>{{ d.id }}</td>
+            <td>{{ d.mobile }}</td>
+            <td>₹{{ d.amount }}</td>
+            <td><strong>{{ d.utr }}</strong></td>
+            <td>{{ d.created_at }}</td>
+            <td class="{{ d.status }}">{{ d.status }}</td>
+            <td>
+                {% if d.status == 'Pending' %}
+                <form method="POST" style="display:inline;">
+                    <input type="hidden" name="req_type" value="deposit">
+                    <input type="hidden" name="req_id" value="{{ d.id }}">
+                    <input type="hidden" name="action" value="approve">
+                    <button class="btn app">Approve</button>
+                </form>
+                <form method="POST" style="display:inline;">
+                    <input type="hidden" name="req_type" value="deposit">
+                    <input type="hidden" name="req_id" value="{{ d.id }}">
+                    <input type="hidden" name="action" value="reject">
+                    <button class="btn rej">Reject</button>
+                </form>
+                {% else %}-{% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>2. Withdrawal Requests (UPI par paisa bhej kar Approve karein)</h2>
+    <table>
+        <tr>
+            <th>ID</th><th>Mobile</th><th>Amount</th><th>User UPI ID</th><th>Time</th><th>Status</th><th>Action</th>
+        </tr>
+        {% for w in withdrawals %}
+        <tr>
+            <td>{{ w.id }}</td>
+            <td>{{ w.mobile }}</td>
+            <td>₹{{ w.amount }}</td>
+            <td><strong>{{ w.upi_id }}</strong></td>
+            <td>{{ w.created_at }}</td>
+            <td class="{{ w.status }}">{{ w.status }}</td>
+            <td>
+                {% if w.status == 'Pending' %}
+                <form method="POST" style="display:inline;">
+                    <input type="hidden" name="req_type" value="withdraw">
+                    <input type="hidden" name="req_id" value="{{ w.id }}">
+                    <input type="hidden" name="action" value="approve">
+                    <button class="btn app">Paid & Approve</button>
+                </form>
+                <form method="POST" style="display:inline;">
+                    <input type="hidden" name="req_type" value="withdraw">
+                    <input type="hidden" name="req_id" value="{{ w.id }}">
+                    <input type="hidden" name="action" value="reject">
+                    <button class="btn rej">Reject (Refund)</button>
+                </form>
+                {% else %}-{% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>3. Registered Users & Wallet Balance</h2>
+    <table>
+        <tr><th>ID</th><th>Mobile Number</th><th>Current Wallet Balance</th></tr>
+        {% for u in users %}
+        <tr>
+            <td>{{ u.id }}</td>
+            <td>{{ u.mobile }}</td>
+            <td style="color:#2ecc71; font-weight:bold;">₹{{ "%.2f"|format(u.balance) }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
